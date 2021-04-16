@@ -1,4 +1,3 @@
-#include "listeArc.h"
 #include "graphe.h"
 
 listeArc nvListeArc () {

@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "listeArc.h"
-
 #define NDIR 4
 
 typedef enum {
@@ -27,6 +25,22 @@ typedef struct s_coord {
 	int yMin;
 	int yMax;
 }*coord;
+
+typedef struct s_listeArc {
+	noeud n1;
+	noeud n2;
+	struct s_listeArc *next;
+} *listeArc;
+
+
+listeArc nvListeArc ();
+
+listeArc ajtlisteArc (listeArc l, noeud n1, noeud n2);
+
+bool existeArc (listeArc l, noeud n1, noeud n2);
+
+void destroylisteArc (listeArc l);
+
 
 noeud nouvnoeud ();
 

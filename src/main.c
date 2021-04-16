@@ -1,6 +1,6 @@
 #include "graphe.h"
-#include "listeArc.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 
 int main () {
 	noeud laby[12];
