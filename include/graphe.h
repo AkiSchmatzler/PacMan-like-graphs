@@ -41,6 +41,8 @@ bool existeArc (listeArc l, noeud n1, noeud n2);
 
 void destroylisteArc (listeArc l);
 
+int longueur_liste (listeArc l);
+
 
 noeud nouvnoeud ();
 
@@ -52,7 +54,7 @@ void taille (noeud n, int *X, int *Y);
 
 void position (noeud n, int *X, int *Y);
 
-void longueurRec (noeud n, listeArc arcParcourues);
+listeArc longueurRec (noeud n, listeArc arcParcourues);
 
 int longueur (noeud n);
 

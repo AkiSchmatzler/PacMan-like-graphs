@@ -38,7 +38,8 @@ int main () {
 		
 	taille (laby[0], &x, &y);
 	printf("\n#### Taille totale du laby : X = %d ; Y = %d #####\n\n", x, y);
-	printf("%d\n",longueur (laby[0]));
+
+	printf("###### Longueur totale du laby : %dm #######\n", longueur (laby[0]));
 
 /*  	for (int i = 0; i<12; i++) {
 		position (laby[i], &x, &y);

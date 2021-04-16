@@ -20,6 +20,11 @@ bool existeArc (listeArc l, noeud n1, noeud n2) {
 	return false;
 }
 
+int longueur_liste (listeArc l) {
+	if (l == NULL) return 0;
+	else return 1 + longueur_liste(l->next);
+}
+
 void destroylisteArc (listeArc l) {
 	if (l == NULL) return;
 	destroylisteArc (l->next);

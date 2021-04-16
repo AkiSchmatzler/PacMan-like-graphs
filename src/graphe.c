@@ -26,19 +26,19 @@ void tailleRec (noeud n, listeArc arcParcourues, coord co) {
 				//on mesure du haut vers le bas et de la gauche vers la droite
 				case NORD :
 					co->yRel -= n->distances[i];
-					co->yMin = (co->yRel < co->yMin) ? co->yRel : co->yMin;
+					if (co->yRel < co->yMin) co->yMin = co->yRel;
 					break;
 				case EST : 
 					co->xRel += n->distances[i];
-					co->xMax = (co->xRel > co->xMax) ? co->xRel : co->xMax;
+					if (co->xRel > co->xMax) co->xMax = co->xRel;
 					break;
 				case SUD : 
 					co->yRel += n->distances[i];
-					co->yMax = (co->yRel > co->yMax) ? co->yRel : co->yMax;
+					if (co->yRel > co->yMax) co->yMax = co->yRel;
 					break;
 				case OUEST : 
 					co->xRel -= n->distances[i];
-					co->xMin = (co->xRel < co->xMin) ? co->xRel : co->xMin;
+					if (co->xRel < co->xMin) co->xMin = co->xRel;
 					break;
 			} 
 			tailleRec (n->voisins[i], arcParcourues, co);
@@ -80,23 +80,32 @@ void position (noeud n, int *X, int *Y) {
 	return;	
 }
 
-void longueurRec (noeud n, listeArc arcParcourues) {
+listeArc longueurRec (noeud n, listeArc arcParcourues) {
 	for (int i = 0; i<4; i++) {
 		if (n->voisins[i] != NULL && !existeArc (arcParcourues, n, n->voisins[i])){
 			arcParcourues = ajtlisteArc (arcParcourues, n, n->voisins[i]);
-			longueurRec(n->voisins[i], arcParcourues);
+			arcParcourues = longueurRec(n->voisins[i], arcParcourues);
 		}
 	}
+	return arcParcourues;
 } 
 
 int longueur (noeud n) {
-	if (n == NULL) return;
 
+	int res = 0;
 	listeArc arcParcourues = nvListeArc();
-  
-	longueurRec (n, arcParcourues);	
+	arcParcourues = longueurRec (n, arcParcourues);	
+	listeArc tmp = arcParcourues;
+	for (int i = 0; i<longueur_liste (arcParcourues); i++) {
+		int j = 0;
+		while (tmp->n1->voisins[j] != tmp->n2) {
+			j++;
+		}
+		res += tmp->n1->distances[j];
+		tmp = tmp->next;
+	}
 
 	destroylisteArc (arcParcourues);
 
-	return;	
+	return res;	
 }
