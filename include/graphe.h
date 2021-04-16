@@ -33,6 +33,7 @@ typedef struct s_listeArc {
 } *listeArc;
 
 
+
 listeArc nvListeArc ();
 
 listeArc ajtlisteArc (listeArc l, noeud n1, noeud n2);

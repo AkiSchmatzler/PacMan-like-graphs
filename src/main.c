@@ -24,6 +24,7 @@ int main () {
 	passage(laby[8], laby[9], EST, 30);
 	passage(laby[10], laby[11], EST, 120);
 
+
 /* 
 	for (int i = 0; i<12; i++) {
 		printf("\n\n###############################\n\n");
@@ -47,5 +48,8 @@ int main () {
 		printf("%d\n", longueur (laby[i]));
 	}  */
 
+	for (int k = 0; k<12; k++) {
+		free(laby[k]);
+	}
 	return 0;
 }
