@@ -37,30 +37,22 @@ int main () {
 	} */
 
 	int x = 0;
-	int y = 0;	
-		
-	taille (laby[0], &x, &y);
-	printf("\n#### Taille totale du laby : X = %d ; Y = %d #####\n\n", x, y);
-
-	//int length = longueur (laby[0]);
-
-	printf("###### Longueur totale du laby : %dm #######\n", longueur (laby[0]));
-
-
-  	for (int i = 0; i<12; i++) {
-		position (laby[i], &x, &y);
-		printf ("Position laby du noeud %d : X = %d, Y = %d\n", i, x, y);
-	}  
+	int y = 0;
 
 	taille (laby[0], &x,&y);
 
 	int ** tab = create_int_array (x, y, laby[1]);
+	printf ("write to file\n");
+
 	for (int i = 0; i<=y; i++) {
 		for (int j = 0; j<=x; j++) {
 			printf ("%d ", tab[i][j]);
 		}
 		printf("\n");
 	}
+
+	write_to_file (tab, x,y);
+
 
 	for (int k = 0; k<12; k++) {
 		free(laby[k]);

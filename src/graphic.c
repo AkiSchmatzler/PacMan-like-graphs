@@ -1,40 +1,5 @@
 #include "graphic.h"
 
-char* itostr(int i) {
-    char const digit[] = "0123456789";
-    char* p = (char*) malloc (4);
-    int shifter = i;
-    do{ //Move to where representation ends
-        ++p;
-        shifter = shifter/10;
-    }while(shifter);
-    *p = '\0';
-    do{ //Move back, inserting digits as u go
-        *--p = digit[i%10];
-        i = i/10;
-    }while(i);
-    return p;
-}
-
-char* init_pgm (int x_size, int y_size) {
-	char *init = {"P2\n"};
-	char *end_init = {"255\n"};
-	char* x = (char *) malloc (12); //tableau de char dans lequel on mettra la taille de x
-	char* y = (char *) malloc (12);; //tableau de char dans lequel on mettra la taille de y
-	sprintf (x, "%d ", x_size);
-	sprintf (y, "%d\n", y_size);
-
-	char *res = (char *) malloc (30);
-	res = strcat (res, init);
-	res = strcat (res, x);
-	res = strcat (res, y);
-	res = strcat (res, end_init);
-	free (x);
-	free (y);
-	printf ("%s", res);
-	return res;
-}
-
 int ** create_int_array (int x_size, int y_size, noeud node) {
 
 	//tableau d'entier 
@@ -58,104 +23,99 @@ int ** create_int_array (int x_size, int y_size, noeud node) {
 	
 	listeArc tmp = arcDuGraphe;
 	for (int v = 0; v < longueur_liste (arcDuGraphe); v++) {
-		printf ("###########\n");
 		int u = 0;
-		int position_x1, position_y1;
+		int position_x1, position_y1, position_x2, position_y2;
 
 		while (tmp->n1->voisins[u] != tmp->n2) { ++u; }
 
 		position (tmp->n1, &position_x1, &position_y1);
+		position (tmp->n2, &position_x2, &position_y2);
 
 		switch (u) {
 			case NORD : 
-				printf ("NORD : je vais de %d à %d en x = %d\n", position_y1, position_y1 - tmp->n1->distances[NORD], position_x1);
 				for (int j = position_y1; j > position_y1 - tmp->n1->distances[NORD]; j--) {
-					tab_pgm [j][position_x1] = 1;
+					tab_pgm [j][position_x1] = 200;
 				}
 				break;
 			case EST : 
-				printf ("EST : je vais de %d à %d en y = %d\n", position_x1, position_x1 + tmp->n1->distances[EST], position_y1);
 				for (int j = position_x1; j < position_x1 + tmp->n1->distances[EST]; j++) {
-					tab_pgm [position_y1][j] = 1;
+					tab_pgm [position_y1][j] = 200;
 				}
 				break;
 			case SUD : 
-				printf ("SUD : je vais de %d à %d en x = %d\n", position_y1, position_y1 + tmp->n1->distances[SUD], position_x1);
 				for (int j = position_y1; j < position_y1 + tmp->n1->distances[SUD]; j++) {
-					tab_pgm [j][position_x1] = 1;
+					tab_pgm [j][position_x1] = 200;
 				}
 				break;	
 			case OUEST :
-				printf ("OUEST : je vais de %d à %d en y = %d\n", position_x1, position_x1 - tmp->n1->distances[OUEST], position_y1);
 				for (int j = position_x1; j > position_x1 - tmp->n1->distances[OUEST]; j--) {
-					tab_pgm [position_y1][j] = 1;
+					tab_pgm [position_y1][j] = 200;
 				}
 				break;		
 		}
 		
-		tab_pgm [position_y1][position_x1] = 2;
+		tab_pgm [position_y1][position_x1] = 128;
+		tab_pgm [position_y2][position_x2] = 128;
 		tmp = tmp->next;
 	}
 
 	destroylisteArc (arcDuGraphe);
 	return tab_pgm;
+
 }
 
 void write_to_file (int ** pgm_int_array, int x_size, int y_size) {
 	char* pathname = {"image/image.pgm"};
+	
+	int ** resized = (int**) malloc ((y_size+2) * N * sizeof (int*));
+
+	if (resized == NULL) abort ();
+	for (int i = 0; i<=(y_size+2)*N; i++) {
+		resized[i] = (int *) malloc ((x_size+2) * N * sizeof (int));
+		if (resized[i] == NULL) abort ();
+	}
+	printf ("memory allocated\n");
 	for (int i = 0; i <= y_size; i++) {
 		for (int j = 0; j <= x_size; j++) {
-			if (pgm_int_array [i][j] == 1) {
-				if (pgm_int_array[i+1][j] == 1 || pgm_int_array[i+1][j]) {
-
+			for (int k = 0; k <= N+1; k++) {
+				for (int l = 0; l <= N+1; l++) {
+          			//transfer the data
+          			resized[i * N + k][j * N + l] =  pgm_int_array[i][j];
 				}
-			}
-			else if (pgm_int_array [i][j] == 2) {
-
 			}
 		}
 	}
+	printf ("resized\n");
 
-}
-
-int create_black_image (int x_size, int y_size, char* pathname) {
-
-	char buf [2*x_size*y_size+1];
-
-	for (int i = 0; i < x_size*y_size; i+=2) {
-		buf[i] = '0'; //0 == black
-		buf[i+1] = ' '; //il faut un espace entre chaque nombre
-	}
-
-	buf[x_size*y_size] = '\0';
-
-	size_t size_written;
-
-	//syscall to create a file, or to write in existing file
 	int fd = open (pathname, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-//	CHECK (fd);
+	if (fd == -1) { fprintf (stderr, "problem with syscall open\n"); abort();}
 
-	char *buf_init = init_pgm (x_size, y_size);
+	printf ("file opened\n");
+	char *buf_init = (char*) malloc (40);
+	sprintf (buf_init, "P2\n%d %d\n255\n", x_size*N+N, y_size*N+N);
+	printf ("%s",buf_init);
+	
+	int size_written =  write(fd, buf_init, strlen(buf_init));
+	if (size_written == -1) { fprintf (stderr, "problem with syscall write\n"); abort();}
+	free (buf_init);
 
-	size_written =  write(fd, buf_init, strlen(buf_init));
-	//CHECK (size_written);
+ 	for (int y = 0; y < y_size * N + N; y++) {
+		for (int x = 0; x < x_size * N + N; x++) {
 
-	for (int j = 0; j<y_size; j++) {
-		
-		size_written =  write (fd, buf, 2*x_size);
-		//CHECK (size_written);
+			char *strint = (char*) malloc (10);
+			sprintf (strint, "%d ", resized[y][x]);
+			size_written = write (fd, strint, strlen (strint));
+			if (size_written == -1) { fprintf (stderr, "problem with syscall write\n"); abort();}
+			free (strint);
+
+		}
+
 		size_written = write (fd, "\n", 1);
-	//	CHECK (size_written);
+		if (size_written == -1) { fprintf (stderr, "problem with syscall write\n"); abort();}
 
 	}
-	
-	free (buf_init);
-	return fd;
-}
 
-/* petit test
-int main () {
-	char* file = {"image/image.pgm"};
-	create_black_image (400, 400, file);
-	return 0;
-} */
+	if (close (fd) == -1) { fprintf (stderr, "problem with syscall close\n"); abort();}
+	printf ("file closed\n");
+	printf ("\nlabyrinth is in image/ and has name image.pmg\n\n");
+}

@@ -8,7 +8,7 @@ E_REP = bin/
 C_REP = src/
 H_REP = include/
 D_REP = dist/
-IFLAGS = -I -ld include -W -Wall
+IFLAGS = -I include -W -Wall
 #-I include -W -Wall
 VPATH = $(H_REP)
 vpath %.o $(E_REP)
