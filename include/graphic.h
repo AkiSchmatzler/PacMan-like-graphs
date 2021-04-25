@@ -11,7 +11,7 @@
 
 #include "graphe.h"
 
-#define N 5
+#define N 10
 #define M 2
 
 

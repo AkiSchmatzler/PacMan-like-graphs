@@ -44,12 +44,12 @@ int main () {
 	int ** tab = create_int_array (x, y, laby[1]);
 	printf ("write to file\n");
 
-	for (int i = 0; i<=y; i++) {
+/* 	for (int i = 0; i<=y; i++) {
 		for (int j = 0; j<=x; j++) {
 			printf ("%d ", tab[i][j]);
 		}
 		printf("\n");
-	}
+	} */
 
 	write_to_file (tab, x,y);
 
