@@ -2,7 +2,7 @@
 
 int ** create_int_array (int x_size, int y_size, noeud node) {
 
-	//tableau d'entier 
+	//2d array of integers
 	int ** tab_pgm = (int **) malloc ((y_size + 1) * sizeof (int*));
 	if (tab_pgm == NULL) abort ();
 	for (int i = 0; i <= x_size; i++) {
@@ -10,52 +10,57 @@ int ** create_int_array (int x_size, int y_size, noeud node) {
 		if (tab_pgm [i] == NULL) abort ();
 	}
 
-	//on remplit le tableau avec des 0
+	//we fille the array with zeros
 	for (int j = 0; j <= y_size; j++) {
 		for (int k = 0; k <= x_size; k++) {
 			tab_pgm[j][k] = 0;
 		}
 	} 
 
-	//on recupere tout les arcs du graphe dans arcDuGraphe
+	//we get all the paths in the graphe in a list of paths
 	listeArc arcDuGraphe = nvListeArc ();
 	arcDuGraphe = longueurRec (node, arcDuGraphe); 
 	
 	listeArc tmp = arcDuGraphe;
+	//for each path between two distinct nodes in the graph
 	for (int v = 0; v < longueur_liste (arcDuGraphe); v++) {
 		int u = 0;
-		int position_x1, position_y1, position_x2, position_y2;
-
+		//we get the direction in which the path is (according to n1)
 		while (tmp->n1->voisins[u] != tmp->n2) { ++u; }
-
+		//we get the position of the two nodes in the graph
+		int position_x1, position_y1, position_x2, position_y2;
 		position (tmp->n1, &position_x1, &position_y1);
 		position (tmp->n2, &position_x2, &position_y2);
 
 		switch (u) {
-			case NORD : 
+			case NORD :
+				//if the path goes to the north we go backwards on the y axis
 				for (int j = position_y1; j > position_y1 - tmp->n1->distances[NORD]; j--) {
-					tab_pgm [j][position_x1] = 200;
+					tab_pgm [j][position_x1] = ARC_VERTICAL;	//flag for vertical paths
 				}
 				break;
 			case EST : 
+				//if the path goes to the east we go forward on the x axis
 				for (int j = position_x1; j < position_x1 + tmp->n1->distances[EST]; j++) {
-					tab_pgm [position_y1][j] = 200;
+					tab_pgm [position_y1][j] = ARC_HORIZONTAL;	//flag for vertical paths
 				}
 				break;
 			case SUD : 
+				//if the path goes to the south we go forward on the y axis
 				for (int j = position_y1; j < position_y1 + tmp->n1->distances[SUD]; j++) {
-					tab_pgm [j][position_x1] = 200;
+					tab_pgm [j][position_x1] = ARC_VERTICAL;	//flag for vertical paths
 				}
 				break;	
 			case OUEST :
+				//if the path goes to the west we go backwards on the x axis
 				for (int j = position_x1; j > position_x1 - tmp->n1->distances[OUEST]; j--) {
-					tab_pgm [position_y1][j] = 200;
+					tab_pgm [position_y1][j] = ARC_HORIZONTAL;	//flag for vertical paths
 				}
 				break;		
 		}
 		
-		tab_pgm [position_y1][position_x1] = 128;
-		tab_pgm [position_y2][position_x2] = 128;
+		tab_pgm [position_y1][position_x1] = NOEUD;	//flag for nodes
+		tab_pgm [position_y2][position_x2] = NOEUD;	//flag for nodes
 		tmp = tmp->next;
 	}
 
@@ -64,9 +69,9 @@ int ** create_int_array (int x_size, int y_size, noeud node) {
 
 }
 
-void write_to_file (int ** pgm_int_array, int x_size, int y_size) {
-	char* pathname = {"image/image.pgm"};
-	
+
+int ** adapt_size (int** pgm_int_array, int x_size, int y_size) {
+	int non_passage = (int) (N - M) / 2;
 	int ** resized = (int**) malloc ((y_size+2) * N * sizeof (int*));
 
 	if (resized == NULL) abort ();
@@ -75,17 +80,41 @@ void write_to_file (int ** pgm_int_array, int x_size, int y_size) {
 		if (resized[i] == NULL) abort ();
 	}
 	printf ("memory allocated\n");
+
 	for (int i = 0; i <= y_size; i++) {
 		for (int j = 0; j <= x_size; j++) {
 			for (int k = 0; k <= N+1; k++) {
 				for (int l = 0; l <= N+1; l++) {
-          			//transfer the data
-          			resized[i * N + k][j * N + l] =  pgm_int_array[i][j];
+          			//si c'est un noeud on colorie tout en gris clair
+					if (pgm_int_array[i][j] == NOEUD){
+          				resized[i * N + k][j * N + l] =  170;
+					}
+					else if (pgm_int_array[i][j] == ARC_VERTICAL) {
+						if ( l >= non_passage && l < (non_passage + M)) {
+							resized[i * N + k][j * N + l] =  255;
+						}
+						else resized[i * N + k][j * N + l] =  0;
+					}
+					else if (pgm_int_array[i][j] == ARC_HORIZONTAL) {
+						if ( k >= non_passage && k < (non_passage + M)) {
+							resized[i * N + k][j * N + l] =  255;
+						}
+						else resized[i * N + k][j * N + l] =  0;
+					}
+					
+					else resized[i * N + k][j * N + l] = 0;
 				}
 			}
 		}
 	}
 	printf ("resized\n");
+	return resized;
+}
+
+void write_to_file (int ** pgm_int_array, int x_size, int y_size) {
+	char* pathname = {"image/image.pgm"};
+	
+	int ** resized = adapt_size (pgm_int_array, x_size, y_size);
 
 	int fd = open (pathname, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1) { fprintf (stderr, "problem with syscall open\n"); abort();}
@@ -114,6 +143,8 @@ void write_to_file (int ** pgm_int_array, int x_size, int y_size) {
 		if (size_written == -1) { fprintf (stderr, "problem with syscall write\n"); abort();}
 
 	}
+
+	//TODO : free pgm_int_array, resized.
 
 	if (close (fd) == -1) { fprintf (stderr, "problem with syscall close\n"); abort();}
 	printf ("file closed\n");

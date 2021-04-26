@@ -9,7 +9,6 @@ C_REP = src/
 H_REP = include/
 D_REP = dist/
 IFLAGS = -I include -W -Wall
-#-I include -W -Wall
 VPATH = $(H_REP)
 vpath %.o $(E_REP)
 vpath %.c $(C_REP)
@@ -41,11 +40,13 @@ clean:
 	rmdir $(E_REP)
 	@echo "\n######## Les repertoires obj/ et bin/ ont ete vides puis supprimes ########\n"
 	
+docs:
+	doxygen Doxyfile
 
 
 dist: 
 	@mkdir -p dist
-	tar -l -cvf dist/SchmatzlerAki-GoL-1.0.tar.xz src makefile 
+	tar -l -cvf dist/Aki_Schmatzler_projet_SDA.tar.xz src include makefile 
 	@echo "\n ######## Archive créée ########\n"
 	
 
