@@ -153,7 +153,7 @@ void passage (noeud n1, noeud n2, Dir d, int dist, float tr[]);
  * \param arcParcourues a pointer on a list of arcs that represents the arcs that have already been visited
  * \param co a pointer on coord structure that evolves through the recursive calls
  */
-void tailleRec (noeud n, listeArc arcParcourues, coord co);
+listeArc tailleRec (noeud n, listeArc arcParcourues, coord co);
 
 
 /**

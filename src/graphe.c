@@ -71,7 +71,7 @@ void passage (noeud n1, noeud n2, Dir d, int dist, float tr[]) {
 	n2->voisins[(d+2)%4] = n1;
 	n1->distances[d] = dist;
 	n2->distances[(d+2)%4] = dist;
-	//malloc for the arrays of trasures
+	//malloc for the arrays of treasures
 	n1->tresors [d] = 		(float *) malloc (dist * sizeof(float));
 	if (n1->tresors[d] == NULL) abort ();
 	n2->tresors[(d+2)%4] =  (float *) malloc (dist * sizeof(float));
@@ -86,7 +86,7 @@ void passage (noeud n1, noeud n2, Dir d, int dist, float tr[]) {
 }
 
 
-void tailleRec (noeud n, listeArc arcParcourues, coord co) {
+listeArc tailleRec (noeud n, listeArc arcParcourues, coord co) {
 	//for each direction
     for (Dir i = 0; i<NDIR; i++) {
 		int tmpX = co->xTmp;
@@ -124,11 +124,12 @@ void tailleRec (noeud n, listeArc arcParcourues, coord co) {
 					break;
 			} 
 			//recursive call
-			tailleRec (n->voisins[i], arcParcourues, co);
+			arcParcourues = tailleRec (n->voisins[i], arcParcourues, co);
 			co->xTmp = tmpX;
 			co->yTmp = tmpY;
 		}
 	}
+	return arcParcourues;
 }
 
 void taille (noeud n, int *X, int *Y) {
@@ -137,7 +138,7 @@ void taille (noeud n, int *X, int *Y) {
 	//list for the paths for our recursive function
 	listeArc arcParcourues = nvListeArc();
 
-	tailleRec (n, arcParcourues, &coord);	
+	arcParcourues = tailleRec (n, arcParcourues, &coord);
 
 	destroylisteArc (arcParcourues);
 
@@ -155,7 +156,7 @@ void position (noeud n, int *X, int *Y) {
 
 	listeArc arcParcourues = nvListeArc();
   
-	tailleRec (n, arcParcourues, &coord);	
+	arcParcourues = tailleRec (n, arcParcourues, &coord);	
 
 	destroylisteArc (arcParcourues);
 

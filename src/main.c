@@ -79,7 +79,7 @@ int main () {
 
 
 	for (int k = 0; k<12; k++) {
-		free(laby[k]);
+		destroynoeud(laby[k]);
 	}
 	return 0;
 	
