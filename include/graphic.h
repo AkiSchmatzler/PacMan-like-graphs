@@ -18,11 +18,17 @@
 
 #include "graphe.h"
 
-#define N 3
-#define M 1
-#define ARC_VERTICAL 1
-#define ARC_HORIZONTAL 2
-#define NOEUD 3
+
+#define N 3					///< numbers of pixels that represents a meter
+#define M 1					///< number of pixels for the width of a path
+#define ARC_VERTICAL 1		///< flag for vertical paths
+#define ARC_HORIZONTAL 2	///< flag for horizontal paths
+#define NOEUD 3				///< flag for nodes
+
+/**
+ * \typedef byte, to not use to much memory for the big arrays
+ */
+typedef unsigned char byte;
 
 
 /**
@@ -34,9 +40,9 @@
  * \param x_size the horizontal lentgh of the graph
  * \param y_size the vertical height of the graph
  * \param node a pointer on node data structure s_node
- * \returns a 2 array of integer that represent the graph
+ * \returns a 2 array of bytes that represent the graph
  */
-int** create_int_array (int x_size, int y_size, noeud node);
+byte** create_int_array (int x_size, int y_size, noeud node);
 
 /**
  * \brief takes the 2D array of the graph and maps it out to the dimension N*x_size, N*y_size
@@ -47,7 +53,7 @@ int** create_int_array (int x_size, int y_size, noeud node);
  * \param y_size the y_size of the pgm_int_array parameter
  * \returns the resized array, ready to be written in a .pgm file
  */
-int ** adapt_size (int** pgm_int_array, int x_size, int y_size);
+byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size);
 
 
 /**
@@ -56,6 +62,6 @@ int ** adapt_size (int** pgm_int_array, int x_size, int y_size);
  * \param x_size the x_size of the pgm_int_array parameter
  * \param y_size the y_size of the pgm_int_array parameter
  */
-void write_to_file (int ** pgm_int_array, int x_size, int y_size);
+void write_to_file (byte ** pgm_int_array, int x_size, int y_size);
 
 #endif

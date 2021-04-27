@@ -1,12 +1,12 @@
 #include "graphic.h"
 
-int ** create_int_array (int x_size, int y_size, noeud node) {
+byte ** create_int_array (int x_size, int y_size, noeud node) {
 
 	//2d array of integers
-	int ** tab_pgm = (int **) malloc ((y_size + 1) * sizeof (int*));
+	byte ** tab_pgm = (byte **) malloc ((y_size + 1) * sizeof (byte*));
 	if (tab_pgm == NULL) abort ();
 	for (int i = 0; i <= y_size; i++) {
-		tab_pgm[i] = (int*) malloc ((x_size + 1) * sizeof (int));
+		tab_pgm[i] = (byte*) malloc ((x_size + 1) * sizeof (byte));
 		if (tab_pgm [i] == NULL) abort ();
 	}
 
@@ -70,17 +70,17 @@ int ** create_int_array (int x_size, int y_size, noeud node) {
 }
 
 
-int ** adapt_size (int** pgm_int_array, int x_size, int y_size) {
+byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size) {
 	//non_passage is the width of each N*N square that is not getting 
 	//painted in white when there is a path on that square, divided by 2
 	//because there is this width on each side of the M pixels
 	int non_passage = (int) (N - M) / 2;
 
-	int ** resized = (int**) malloc ((y_size+2) * N * sizeof (int*));
+	byte ** resized = (byte**) malloc ((y_size+2) * N * sizeof (byte*));
 
 	if (resized == NULL) abort ();
 	for (int i = 0; i<(y_size+2)*N; i++) {
-		resized[i] = (int *) malloc ((x_size+2) * N * sizeof (int));
+		resized[i] = (byte *) malloc ((x_size+2) * N * sizeof (byte));
 		if (resized[i] == NULL) abort ();
 	}
 	printf ("memory allocated\n");
@@ -120,10 +120,10 @@ int ** adapt_size (int** pgm_int_array, int x_size, int y_size) {
 	return resized;
 }
 
-void write_to_file (int ** pgm_int_array, int x_size, int y_size) {
+void write_to_file (byte ** pgm_int_array, int x_size, int y_size) {
 	char* pathname = {"image/image.pgm"};
 	//call to function adapt_size
-	int ** resized = adapt_size (pgm_int_array, x_size, y_size);
+	byte ** resized = adapt_size (pgm_int_array, x_size, y_size);
 
 	//opening the file, creating it if doesn't exist, if it exists we delete it's content
 	int fd = open (pathname, O_CREAT | O_WRONLY | O_TRUNC, 0666);

@@ -237,13 +237,13 @@ float valeurTotalTresors (noeud n) {
 		}
 		//if we checked only node 2
 		else if (!existeArc (noeudsVisites, tmp->n1, NULL) && existeArc (noeudsVisites, tmp->n2, NULL)) {
-			noeudsVisites = ajtlisteArc (noeudsVisites, tmp->n2, NULL);
+			noeudsVisites = ajtlisteArc (noeudsVisites, tmp->n1, NULL);
 			//we add to res the whole array minus the tresor at the second node
 			res += sum_float_array (tmp->n1->tresors[j], 0, tmp->n1->distances[j] - 1);
 		} 	
 		//if we checked only node 1
 		else if (existeArc (noeudsVisites, tmp->n1, NULL) && !existeArc (noeudsVisites, tmp->n2, NULL)) {
-			noeudsVisites = ajtlisteArc (noeudsVisites, tmp->n1, NULL);
+			noeudsVisites = ajtlisteArc (noeudsVisites, tmp->n2, NULL);
 			//we add to res the whole array minus the tresor at the first node
 			res += sum_float_array (tmp->n1->tresors[j], 1, tmp->n1->distances[j]);
 		} 
@@ -260,3 +260,6 @@ float valeurTotalTresors (noeud n) {
 	destroylisteArc (arcParcourues);
 	return res;
 }
+
+
+

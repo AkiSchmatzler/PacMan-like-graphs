@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define NDIR 4
+#define NDIR 4		///< Number of direction (north east south west)
 
 
 /**
@@ -152,6 +152,7 @@ void passage (noeud n1, noeud n2, Dir d, int dist, float tr[]);
  * \param n a pointer on node structure s_noeud
  * \param arcParcourues a pointer on a list of arcs that represents the arcs that have already been visited
  * \param co a pointer on coord structure that evolves through the recursive calls
+ * \return the list of paths in the graph
  */
 listeArc tailleRec (noeud n, listeArc arcParcourues, coord co);
 
@@ -199,6 +200,13 @@ int longueur (noeud n);
 float sum_float_array (float *ar, int beginning, int end);
 
 
+/**
+ * \brief gets the total value of the treasures in the graph
+ * calls longueurRec to get all the paths in the graph
+ * calls sum_float array
+ * \param n a pointer on node structure s_node
+ * \returns the sum of the value of the treasures in the graph
+ */
 float valeurTotalTresors(noeud n);
 
 #endif

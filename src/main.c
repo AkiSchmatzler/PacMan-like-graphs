@@ -61,7 +61,7 @@ int main () {
 
 	taille (laby[0], &x,&y);
 
-	int ** tab = create_int_array (x, y, laby[1]);
+	//byte ** tab = create_int_array (x, y, laby[1]);
 	printf ("write to file\n");
 /* 
 	for (int i = 0; i<=y; i++) {
@@ -71,11 +71,11 @@ int main () {
 		printf("\n");
 	} */
 
-	write_to_file (tab, x,y);
+	//write_to_file (tab, x,y);
 
-/* 	for (int k = 0; k<12; k++) {
+	for (int k = 0; k<12; k++) {
 		printf ("V'la les trésors : %.1f moulaga\n", valeurTotalTresors(laby[k]));
-	} */
+	}
 
 
 	for (int k = 0; k<12; k++) {
