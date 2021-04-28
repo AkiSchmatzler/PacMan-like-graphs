@@ -10,44 +10,46 @@ int main () {
 		laby[i] = nouvnoeud ();
 	}
 	
-	float zero_to_1 	[60] = {0};
-	float one_to_2  	[80] = {0};
-	float one_to_6  	[30] = {0};
-	float two_to_8  	[30] = {0};
-	float three_to_9 	[30] = {0};
-	float four_to_5 	[20] = {0};
-	float five_to_6 	[70] = {0};
-	float five_to_10 	[20] = {0};
-	float six_to_7		[50] = {0};
-	float seven_to_8	[30] = {0};
-	float seven_to_11	[20] = {0};
-	float eight_to_9	[30] = {0};
-	float ten_to_11	   [120] = {0};
 
-	one_to_6 	[29] = 1000;
+	float tabzero	   [120] = {0};
+
+
+/* 	one_to_6 	[29] = 1000;
 	five_to_6 	[69] = 1000;
 	six_to_7 	[0]  = 1000;
 	three_to_9	[15] = 1000;
 	ten_to_11	[10] = 1000;
-
+ */
 	
 
-	passage(laby[0], laby[1], EST, 60, 	zero_to_1);
-	passage(laby[1], laby[2], EST, 80, 	one_to_2);
-	passage(laby[1], laby[6], SUD, 30, 	one_to_6);
-	passage(laby[2], laby[8], SUD, 30, 	two_to_8);
-	passage(laby[3], laby[9], SUD, 30, 	three_to_9);
-	passage(laby[4], laby[5], SUD, 20, 	four_to_5);
-	passage(laby[5], laby[6], EST, 70, 	five_to_6);
-	passage(laby[5], laby[10], SUD, 20, five_to_10);
-	passage(laby[6], laby[7], EST, 50, 	six_to_7);
-	passage(laby[7], laby[8], EST, 30, 	seven_to_8);
-	passage(laby[7], laby[11], SUD, 20, seven_to_11);
-	passage(laby[8], laby[9], EST, 30, 	eight_to_9);
-	passage(laby[10], laby[11], EST, 120, ten_to_11);
-
+	passage(laby[0], laby[1], EST, 60, 	tabzero);
+	passage(laby[1], laby[2], EST, 80, 	tabzero);
+	tabzero[29] = 4000;
+	passage(laby[1], laby[6], SUD, 30, 	tabzero);
+	tabzero[29] = 0;
+	passage(laby[2], laby[8], SUD, 30, 	tabzero);
+	tabzero[15] = 500;
+	passage(laby[3], laby[9], SUD, 30, 	tabzero);
+	tabzero[15] = 0;
+	passage(laby[4], laby[5], SUD, 20, 	tabzero);
+	tabzero[69] = 4000;
+	passage(laby[5], laby[6], EST, 70, 	tabzero);
+	tabzero[69] = 0;
+	passage(laby[5], laby[10], SUD, 20, tabzero);
+	tabzero[0] = 4000;
+	passage(laby[6], laby[7], EST, 50, 	tabzero);
+	tabzero[0] = 0;
+	passage(laby[7], laby[8], EST, 30, 	tabzero);
+	passage(laby[7], laby[11], SUD, 20, tabzero);
+	passage(laby[8], laby[9], EST, 30, 	tabzero);
+	tabzero[10] = 200;
+	passage(laby[10], laby[11], EST, 120, tabzero); 
+	tabzero[10] = 0;
 
 /* 
+	//////////////////////////////////////////////////////////////////////////////////
+	TO CHECH IF DISTANCE ARE ACCURATE
+	///////////////////////////////////////////////////////////////////////////////////
 	for (int i = 0; i<12; i++) {
 		printf("\n\n###############################\n\n");
 		printf ("laby[%d] : distance voisin EST = %d\n", i, laby[i]->distances[EST]);
@@ -62,8 +64,11 @@ int main () {
 	taille (laby[0], &x,&y);
 
 	//byte ** tab = create_int_array (x, y, laby[1]);
-	printf ("write to file\n");
 /* 
+	/////////////////////////////////////////////////////////////////
+		TO VISUALIZE THE ARRAY OF BYTES THAT REPRESENT THE GRAPH
+	/////////////////////////////////////////////////////////////////
+	
 	for (int i = 0; i<=y; i++) {
 		for (int j = 0; j<=x; j++) {
 			printf ("%d ", tab[i][j]);
@@ -72,18 +77,26 @@ int main () {
 	} */
 
 	//write_to_file (tab, x,y);
-
-	for (int k = 0; k<12; k++) {
+/* 
+  	for (int k = 0; k<12; k++) {
 		printf ("V'la les trésors : %.1f moulaga\n", valeurTotalTresors(laby[k]));
-	}
-
-
+	} 
+ */
+	for (int k = 0; k<12; k++)
+		printf ("trésors le plus proche de noeud %d a comme valeur %.2f\n", k, valeurPlusProcheTresors (laby[k]));
+	
 	for (int k = 0; k<12; k++) {
 		destroynoeud(laby[k]);
 	}
-	return 0;
+	return 0; 
 	
-/* 	noeud pacman[54];
+/*
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////  TO CREATE PAC-MAN LABYRINTH GRAPH  ///////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+ 	noeud pacman[54];
 	for (int i = 0; i<54; i++) {
 		pacman[i] = nouvnoeud();
 	}
@@ -164,7 +177,7 @@ int main () {
 
 	taille (pacman[0], &x,&y);
 
-	int ** tab = create_int_array (x, y, pacman[1]);
+	byte ** tab = create_int_array (x, y, pacman[1]);
 
 	for (int i = 0; i<=y; i++) {
 		for (int j = 0; j<=x; j++) {
@@ -176,7 +189,7 @@ int main () {
 	write_to_file (tab, x,y);
 
 	for (int k = 0; k<54; k++) {
-		free(pacman[k]);
+		destroynoeud (pacman[k]);
 	} */
 
 	return 0;

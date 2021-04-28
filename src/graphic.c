@@ -121,6 +121,7 @@ byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size) {
 }
 
 void write_to_file (byte ** pgm_int_array, int x_size, int y_size) {
+	//where the file is gonna go and it's name
 	char* pathname = {"image/image.pgm"};
 	//call to function adapt_size
 	byte ** resized = adapt_size (pgm_int_array, x_size, y_size);

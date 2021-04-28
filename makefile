@@ -46,7 +46,7 @@ docs:
 
 dist: 
 	@mkdir -p dist
-	tar -l -cvf dist/Aki_Schmatzler_projet_SDA.tar.xz src include makefile 
+	tar -l -cvf dist/Aki_Schmatzler_projet_SDA.tar.xz src include makefile image
 	@echo "\n ######## Archive créée ########\n"
 	
 

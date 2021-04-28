@@ -52,6 +52,17 @@ typedef struct s_coord {
 }*coord;
 
 /**
+ * \struct s_coord
+ * \brief list for treasures in a graph
+ * weight represents the distance of a given node to that treasure
+ */
+typedef struct s_weightTreasure {
+	int weight;
+	float treasure;
+	struct s_weightTreasure *next;
+}*weightTreasure;
+
+/**
  * \struct s_listeArc
  * \brief  list structure to handle paths between two nodes in some functions
  * contains two pointer on a s_node structure
@@ -63,6 +74,19 @@ typedef struct s_listeArc {
 	struct s_listeArc *next;
 } *listeArc;
 
+
+/**
+ * \struct s_listeNoeuds
+ * \brief  list structure for my implementation of a variant of the Dijkstra algorithm
+ * contains one pointer on a s_node structure
+ * the value to get to that node, meaning the distance to that node
+ * and a pointer on the next element of the list
+ */
+typedef struct s_listeNoeuds {
+	noeud n;
+	int poids;
+	struct s_listeNoeuds *next;
+} *listeNoeuds;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////	OPERATION ON s_listeArcs STRUCTURE //////////////////////////////////////////////
@@ -208,5 +232,13 @@ float sum_float_array (float *ar, int beginning, int end);
  * \returns the sum of the value of the treasures in the graph
  */
 float valeurTotalTresors(noeud n);
+
+
+/**
+ * \brief finds the value of the closest treasure
+ * \param n pointer on node structure s_noeud
+ * \return the value of the closest treasure to the node
+ */
+float valeurPlusProcheTresors(noeud n);
 
 #endif
