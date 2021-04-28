@@ -63,7 +63,7 @@ int main () {
 
 	taille (laby[0], &x,&y);
 
-	//byte ** tab = create_int_array (x, y, laby[1]);
+	byte ** tab = create_int_array (x, y, laby[1]);
 /* 
 	/////////////////////////////////////////////////////////////////
 		TO VISUALIZE THE ARRAY OF BYTES THAT REPRESENT THE GRAPH
@@ -76,12 +76,12 @@ int main () {
 		printf("\n");
 	} */
 
-	//write_to_file (tab, x,y);
-/* 
+	write_to_file (tab, x,y);
+
   	for (int k = 0; k<12; k++) {
 		printf ("V'la les trésors : %.1f moulaga\n", valeurTotalTresors(laby[k]));
 	} 
- */
+
 	for (int k = 0; k<12; k++)
 		printf ("trésors le plus proche de noeud %d a comme valeur %.2f\n", k, valeurPlusProcheTresors (laby[k]));
 	

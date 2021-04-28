@@ -19,7 +19,7 @@
 #include "graphe.h"
 
 
-#define N 20					///< numbers of pixels that represents a meter
+#define N 12					///< numbers of pixels that represents a meter
 #define M 4					///< number of pixels for the width of a path
 #define ARC_VERTICAL 1		///< flag for vertical paths
 #define ARC_HORIZONTAL 2	///< flag for horizontal paths
