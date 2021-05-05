@@ -1,25 +1,30 @@
 #include "graphe.h"
 #include "graphic.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "listeArc.h"
+#include "listeNoeuds.h"
+
+/**
+ * \file main.c
+ * \brief file that only contains the main function
+ * is used for testing purposes, you'll find in comments tests for some of the function for the assignement
+ * \author Aki Schmatzler
+ * \version 1.0
+ */
+
 
 int main () {
+
+	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////		LABYRINTHE DU SUJET 	///////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
+
 	noeud laby[12];
 
 	for (int i = 0; i<12; i++) {
 		laby[i] = nouvnoeud ();
 	}
 	
-
 	float tabzero	   [120] = {0};
-
-
-/* 	one_to_6 	[29] = 1000;
-	five_to_6 	[69] = 1000;
-	six_to_7 	[0]  = 1000;
-	three_to_9	[15] = 1000;
-	ten_to_11	[10] = 1000;
- */
 	
 
 	passage(laby[0], laby[1], EST, 60, 	tabzero);
@@ -48,7 +53,7 @@ int main () {
 
 /* 
 	//////////////////////////////////////////////////////////////////////////////////
-	TO CHECH IF DISTANCE ARE ACCURATE
+								TO CHECH IF DISTANCE ARE ACCURATE
 	///////////////////////////////////////////////////////////////////////////////////
 	for (int i = 0; i<12; i++) {
 		printf("\n\n###############################\n\n");
@@ -58,12 +63,40 @@ int main () {
 		printf ("laby[%d] : distance voisin NORD = %d\n", i, laby[i]->distances[NORD]);
 	} */
 
+	
+///////////////////////////////////////////////////////////////////////////////////
+/////////////////////		POUR TESTER TAILLE, POSITION ET LONGUEUR
+///////////////////////////////////////////////////////////////////////////////////
+/* 	int a = 0;
+	int b = 0;
+	for (int i = 0; i<12; i++) {
+		printf ("\nNOEUD %d : \n", i);
+		position (laby[i], &a, &b);
+		printf ("	Position : X = %d ; Y = %d\n", a, b);
+		taille (laby[i], &a, &b);
+		//to check if the total size of the graph is the same everywhere
+		printf ("	Taille total laby  : X = %d ; Y = %d\n", a, b);
+		printf ("	Longueur total laby : %d\n", longueur (laby[i]));
+
+	}  */
+
+
+
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////		CREATES AN IMAGE OF THE LABYRINTH	///////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+
 	int x = 0;
 	int y = 0;
+	int N = 9;	//length of a meter in pixels
+	int M = 3;	//width of the vertices of the array
 
 	taille (laby[0], &x,&y);
 
 	byte ** tab = create_int_array (x, y, laby[1]);
+	write_to_file (tab, x, y, N, M);
+
+
 /* 
 	/////////////////////////////////////////////////////////////////
 		TO VISUALIZE THE ARRAY OF BYTES THAT REPRESENT THE GRAPH
@@ -76,18 +109,24 @@ int main () {
 		printf("\n");
 	} */
 
-	write_to_file (tab, x,y);
+  	
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////		POUR TESTER VALEURTOTALTRESORS()	///////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+/* 	for (int k = 0; k<12; k++) {
+		printf ("Valeurs total des trésors : %.1f $\n", valeurTotalTresors(laby[k]));
+	} */
 
-  	for (int k = 0; k<12; k++) {
-		printf ("V'la les trésors : %.1f moulaga\n", valeurTotalTresors(laby[k]));
-	} 
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////	POUR TESTER VALEURPLUSPROCHETRESORS()	///////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+/* 	for (int k = 0; k<12; k++)
+		printf ("trésors le plus proche de noeud %d a comme valeur %.2f\n", k, valeurPlusProcheTresors (laby[k])); */
 
-	for (int k = 0; k<12; k++)
-		printf ("trésors le plus proche de noeud %d a comme valeur %.2f\n", k, valeurPlusProcheTresors (laby[k]));
-	
+	//frees the memory allocated to the labyrinth
 	for (int k = 0; k<12; k++) {
 		destroynoeud(laby[k]);
-	}
+	} 
 	return 0; 
 	
 /*
@@ -96,12 +135,6 @@ int main () {
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
- 	noeud pacman[54];
-	for (int i = 0; i<54; i++) {
-		pacman[i] = nouvnoeud();
-	}
-	float tr_3[3] = {0};
-	float tr_5[5] = {0};
 	float tr_6[6] = {0};
 	float tr_9[9] = {0};
 	float tr_2[2] = {0};
@@ -191,6 +224,7 @@ int main () {
 	for (int k = 0; k<54; k++) {
 		destroynoeud (pacman[k]);
 	} */
+
 
 	return 0;
 }

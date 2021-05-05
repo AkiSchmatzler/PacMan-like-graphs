@@ -13,8 +13,13 @@ The images use the .pgm file extension
 `make dist` creates an archive for this project in the dist/ repository that is created  
 `make rmdist` removes the archive and the dist/ directory containing it  
 
+
+### Execution  
+After the files have been compiled, you can use `./bin/main` to execute the program  
+
+
 ### File organisation  
 The source C file are in src/ directory, the headers are in the include/ directory  
 The images are going to be put in the image/ directory  
 :warning: Do not remove image/ directory.  
-If you wanna keep an image, change it's name, the generic name is always image.pgm  
+If you wanna keep an image, change it's name, the generic name is always image.pgm, which means an image will write over the current image.pgm file content (if this file exists in the image/ repository) 

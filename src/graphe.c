@@ -1,39 +1,12 @@
 #include "graphe.h"
 
-listeArc nvListeArc () {
-	return NULL;
-}
-
-listeArc ajtlisteArc (listeArc l, noeud n1, noeud n2) {
-	listeArc res = (listeArc) malloc (sizeof (struct s_listeArc));
-	res->n1 = n1;
-	res->n2 = n2;
-	res->next = l;
-	return res;
-}
-
-bool existeArc (listeArc l, noeud n1, noeud n2) {
-	if (l != NULL) {
-		//checking if the path exists in any of the direction
-		if((l->n1 == n1 && l->n2 == n2) || (l->n1 == n2 && l->n2 == n1)) return true;
-		//recursive call
-		return existeArc (l->next, n1, n2);
-	}
-	return false;
-}
-
-int longueur_liste (listeArc l) {
-	if (l == NULL) return 0;
-	else return 1 + longueur_liste(l->next);
-}
-
-
-void destroylisteArc (listeArc l) {
-	if (l == NULL) return;
-	destroylisteArc (l->next);
-	free(l);
-	return;
-}
+/**
+ * \file graphe.c
+ * \brief definition from function on node structure and graph
+ * This file specifies functions to manipulate graphs
+ * \author Aki Schmatzler
+ * \version 1.0
+ */
 
 noeud nouvnoeud () {
 	noeud res = (noeud) malloc (sizeof (struct s_noeud));
@@ -132,7 +105,7 @@ listeArc tailleRec (noeud n, listeArc arcParcourues, coord co) {
 void taille (noeud n, int *X, int *Y) {
 	if (n == NULL) return;
 	struct s_coord coord = {0};
-	//list for the paths for our recursive function
+	//list for the vertices of our graph for our recursive function
 	listeArc arcParcourues = nvListeArc();
 
 	arcParcourues = tailleRec (n, arcParcourues, &coord);
@@ -165,13 +138,13 @@ void position (noeud n, int *X, int *Y) {
 	return;	
 }
 
-listeArc longueurRec (noeud n, listeArc arcParcourues) {
+listeArc allVertices (noeud n, listeArc arcParcourues) {
 	for (int i = 0; i<4; i++) {
 		//if there is a neighbor and we haven't checked that path yet
 		if (n->voisins[i] != NULL && !existeArc (arcParcourues, n, n->voisins[i])){
 			//we add the path to the list of paths structure
 			arcParcourues = ajtlisteArc (arcParcourues, n, n->voisins[i]);
-			arcParcourues = longueurRec(n->voisins[i], arcParcourues);
+			arcParcourues = allVertices(n->voisins[i], arcParcourues);
 		}
 	}
 	return arcParcourues;
@@ -180,7 +153,7 @@ listeArc longueurRec (noeud n, listeArc arcParcourues) {
 int longueur (noeud n) {
 	int res = 0;
 	listeArc arcParcourues = nvListeArc();
-	arcParcourues = longueurRec (n, arcParcourues);	
+	arcParcourues = allVertices (n, arcParcourues);	
 	listeArc tmp = arcParcourues;
 	for (int i = 0; i<longueur_liste (arcParcourues); i++) {
 		int j = 0;
@@ -197,95 +170,7 @@ int longueur (noeud n) {
 	return res;	
 }
 
-listeNoeuds nouvlisteNoeuds () {
-	return NULL;
-}
 
-void destroylisteNoeud (listeNoeuds ln) {
-	if (ln == NULL) return;
-	destroylisteNoeud (ln->next);
-	free(ln);
-	return;
-}
-
-listeNoeuds addNoeud (listeNoeuds ln, noeud n) {
-	listeNoeuds res = (listeNoeuds) malloc (sizeof (struct s_listeNoeuds));
-	if (res == NULL) abort ();
-	res->n = n;
-	//initialise weight to -1
-	res->poids = -1;
-	res->next = ln;
-	return res;
-}
-
-int longueurNoeud (listeNoeuds ln) {
-	if (ln == NULL) return 0;
-	return 1 + longueurNoeud (ln->next);
-}
-
-listeNoeuds removeNoeud (listeNoeuds l, noeud n) {
-	if (l == NULL) return NULL;
-	if (l->n == n) {
-		listeNoeuds l1 = l->next;
-		free (l);
-		return l1;
-	}
-	else {
-		listeNoeuds tmp = l;
-
-		while (tmp->next->n != n)
-			tmp = tmp->next;
-		
-		listeNoeuds tmp2 = tmp->next;
-		tmp->next = tmp->next->next;
-		free (tmp2);
-		return l;
-	}
-}
-
-bool existeNoeud (listeNoeuds l, noeud n) {
-	if (l != NULL) {
-		if (l->n == n) return true;
-		else return existeNoeud (l->next, n);
-	}
-	return false;
-}
-
-
-int valueWeight (listeNoeuds ln, noeud n) {
-	if (ln != NULL) {
-		if (ln->n == n) return ln->poids;
-		else return valueWeight (ln->next, n);
-	}
-	return -1;
-}
-
-listeNoeuds changeValueWeight (listeNoeuds ln, noeud n, int newWeight) {
-	listeNoeuds tmp = ln;
-	for (int i = 0; i<longueurNoeud(ln); i++) {
-		if (tmp->n == n) {
-			tmp->poids = newWeight;
-			return ln;
-		}
-		tmp = tmp->next;
-	}
-	return ln;
-}
-
-noeud nodeMinimumWeight (listeNoeuds ln) {
-	if (ln == NULL) return NULL;
-	listeNoeuds tmp = ln;
-	int min = __INT_MAX__;
-	noeud res = NULL;
-	for (int i = 0; i < longueurNoeud (ln); i++) {
-		if (tmp->poids < min && tmp->poids > 0) {
-			res = tmp->n;
-			min = tmp->poids;
-		}
-		tmp = tmp->next;
-	}
-	return res;
-}
 
 
 
@@ -300,7 +185,7 @@ float sum_float_array (float *ar, int beginning, int end) {
 float valeurTotalTresors (noeud n) {
 	float res = 0;
 	listeArc arcParcourues = nvListeArc ();
-	arcParcourues = longueurRec (n, arcParcourues);
+	arcParcourues = allVertices (n, arcParcourues);
 	listeArc tmp = arcParcourues;
 	//list of pointer on s_noeud structure we've already visited
 	//to deal with the case of a treasure being on a node 
@@ -387,13 +272,14 @@ float dijkstraRemix (listeNoeuds* nonVisites, noeud n) {
 					if (tmp < res[0]) {
 						res[0] = tmp;
 						res[1] = current->tresors[i][treasureOrNot];
+						/*	TO SHOW THAT WE DON'T STOP AT THE FIRST TREASURE FOUND IF THERE'S OTHERS
 						fprintf (stderr, "################################################################");
-						fprintf (stderr, "\nwe got a treasure !! %.1f --> %.1f\n",res[0], res[1]);
+						fprintf (stderr, "\nwe got a treasure !! distance : %.1f value :  %.1f\n",res[0], res[1]); */
 					}
 				}
 				//we get the weight to go to the neighbor
 				int valNeighbor = valueWeight (*nonVisites, current->voisins[i]);
-				//if it's bigger than the distance we have through this path we change it's wieght
+				//if it's bigger than the distance we have through this path we change it's weight
 				if (valNeighbor > tmp || valNeighbor < 0) {
 					*nonVisites = changeValueWeight (*nonVisites, current->voisins[i], tmp);
 				}
@@ -418,7 +304,7 @@ float valeurPlusProcheTresors (noeud n) {
 	listeNoeuds nonVisites = nouvlisteNoeuds ();
 	listeArc chemins = nvListeArc ();
 	//we get all the vertices of the graph in a list
-	chemins = longueurRec (n, chemins);
+	chemins = allVertices (n, chemins);
 	listeArc tmp = chemins;
 
 	//we get all the nodes of the graph inside our list of nodes

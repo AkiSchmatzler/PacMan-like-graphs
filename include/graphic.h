@@ -16,11 +16,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "listeArc.h"
 #include "graphe.h"
 
 
-#define N 12					///< numbers of pixels that represents a meter
-#define M 4					///< number of pixels for the width of a path
+
 #define ARC_VERTICAL 1		///< flag for vertical paths
 #define ARC_HORIZONTAL 2	///< flag for horizontal paths
 #define NOEUD 3				///< flag for nodes
@@ -51,9 +51,12 @@ byte** create_int_array (int x_size, int y_size, noeud node);
  * \param pgm_int_array the 2 array that represents the graph
  * \param x_size the x_size of the pgm_int_array parameter
  * \param y_size the y_size of the pgm_int_array parameter
+ * \param metre length of a meter (in pixel)
+ * \param largeur width of the vertices of the graph 
+ * \pre metre>largeur
  * \returns the resized array, ready to be written in a .pgm file
  */
-byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size);
+byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size, int metre, int largeur);
 
 
 /**
@@ -61,7 +64,10 @@ byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size);
  * \param pgm_int_array the 2 array that represents the graph
  * \param x_size the x_size of the pgm_int_array parameter
  * \param y_size the y_size of the pgm_int_array parameter
+ * \param metre length of a meter (in pixel)
+ * \param largeur width of the vertices of the graph 
+ * \pre metre>largeur
  */
-void write_to_file (byte ** pgm_int_array, int x_size, int y_size);
+void write_to_file (byte ** pgm_int_array, int x_size, int y_size, int metre, int largeur);
 
 #endif

@@ -4,8 +4,7 @@
 
 /**
  * \file graphe.h
- * \brief header for all the functions for list of path structure and node structure 
- * This file specifies functions to manipulate both data structures
+ * \brief header for all the functions for node structure and graphs
  * \author Aki Schmatzler
  * \version 1.0
  */
@@ -13,6 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+#include "listeArc.h"
+#include "listeNoeuds.h"
 
 #define NDIR 4		///< Number of direction (north east south west)
 
@@ -38,6 +40,9 @@ typedef struct s_noeud {
 	float 			*tresors[NDIR];
 } *noeud;
 
+typedef struct s_listeArc* listeArc;
+typedef struct s_listeNoeuds* listeNoeuds;
+
 /**
  * \struct s_coord
  * \brief structure to handle coordinates in some functions
@@ -51,91 +56,7 @@ typedef struct s_coord {
 	int yMax;
 }*coord;
 
-/**
- * \struct s_coord
- * \brief list for treasures in a graph
- * weight represents the distance of a given node to that treasure
- */
-typedef struct s_weightTreasure {
-	int weight;
-	float treasure;
-	struct s_weightTreasure *next;
-}*weightTreasure;
 
-/**
- * \struct s_listeArc
- * \brief  list structure to handle paths between two nodes in some functions
- * contains two pointer on a s_node structure
- * and a pointer on the next element of the list
- */
-typedef struct s_listeArc {
-	noeud n1;
-	noeud n2;
-	struct s_listeArc *next;
-} *listeArc;
-
-
-/**
- * \struct s_listeNoeuds
- * \brief  list structure for my implementation of a variant of the Dijkstra algorithm
- * contains one pointer on a s_node structure
- * the value to get to that node, meaning the distance to that node
- * and a pointer on the next element of the list
- */
-typedef struct s_listeNoeuds {
-	noeud n;
-	int poids;
-	struct s_listeNoeuds *next;
-} *listeNoeuds;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////	OPERATION ON s_listeArcs STRUCTURE //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * \brief creates a new liste of paths
- * \return a pointer on the new list (which is NULL)
- */
-listeArc nvListeArc ();
-
-/**
- * \brief adds a path to a list of paths
- * the new path is added at the beginning of the list
- * \param l a pointer on a list ofPaths
- * \param n1 a node
- * \param n2 another node
- * \return a pointer on the new list
- */
-listeArc ajtlisteArc (listeArc l, noeud n1, noeud n2);
-
-/**
- * \brief check if a path exists in a given list of paths
- * checks both ways (if l->n1 == n1 and l->n2 == n2 or the other way)
- * both of these cases return true
- * recursive functuion
- * \param l a pointer on a list of paths
- * \param n1 a node
- * \param n2 another node
- * \return if the node exists true, if not then false
- */
-bool existeArc (listeArc l, noeud n1, noeud n2);
-
-
-/**
- * \brief frees the memory allocated to a list of paths
- * \param l a list of paths
- */
-void destroylisteArc (listeArc l);
-
-
-/**
- * \brief counts the number of elements in a list of paths
- * recursive functions
- * \param l a list of paths
- * \return the length of the list
- */
-int longueur_liste (listeArc l);
 
 
 
@@ -206,7 +127,7 @@ void position (noeud n, int *X, int *Y);
  * \param arcParcourues a pointer on list of path structure
  * \return a pointer on a list of all the different paths between two separate nodes in the graph
  */
-listeArc longueurRec (noeud n, listeArc arcParcourues);
+listeArc allVertices (noeud n, listeArc arcParcourues);
 
 
 /** 

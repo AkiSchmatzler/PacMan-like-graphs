@@ -1,5 +1,13 @@
 #include "graphic.h"
 
+/**
+ * \file graphic.c
+ * \brief definition of functions to write graph to an image file
+ * \author Aki Schmatzler
+ * \version 1.0
+ */
+
+
 byte ** create_int_array (int x_size, int y_size, noeud node) {
 
 	//2d array of integers
@@ -19,7 +27,7 @@ byte ** create_int_array (int x_size, int y_size, noeud node) {
 
 	//we get all the paths in the graphe in a list of paths
 	listeArc arcDuGraphe = nvListeArc ();
-	arcDuGraphe = longueurRec (node, arcDuGraphe); 
+	arcDuGraphe = allVertices (node, arcDuGraphe); 
 	
 	listeArc tmp = arcDuGraphe;
 	//for each path between two distinct nodes in the graph
@@ -70,79 +78,77 @@ byte ** create_int_array (int x_size, int y_size, noeud node) {
 }
 
 
-byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size) {
-	//non_passage is the width of each N*N square that is not getting 
+byte ** adapt_size (byte** pgm_int_array, int x_size, int y_size, int metre, int largeur) {
+	//non_passage is the width of each metre*metre square that is not getting 
 	//painted in white when there is a path on that square, divided by 2
-	//because there is this width on each side of the M pixels
-	int non_passage = (int) (N - M) / 2;
+	//because there is this width on each side of the largeur pixels
+	int non_passage = (int) (metre - largeur) / 2;
 
-	byte ** resized = (byte**) malloc ((y_size+2) * N * sizeof (byte*));
+	byte ** resized = (byte**) malloc ((y_size+2) * metre * sizeof (byte*));
 
 	if (resized == NULL) abort ();
-	for (int i = 0; i<(y_size+2)*N; i++) {
-		resized[i] = (byte *) malloc ((x_size+2) * N * sizeof (byte));
+	for (int i = 0; i<(y_size+2)*metre; i++) {
+		resized[i] = (byte *) malloc ((x_size+2) * metre * sizeof (byte));
 		if (resized[i] == NULL) abort ();
 	}
-	printf ("memory allocated\n");
 
 	for (int i = 0; i <= y_size; i++) {
 		for (int j = 0; j <= x_size; j++) {
 
-			for (int k = 0; k <= N+1; k++) {
-				for (int l = 0; l <= N+1; l++) {
+			for (int k = 0; k <= metre+1; k++) {
+				for (int l = 0; l <= metre+1; l++) {
           			//if the integer in the array corresponds to a node we color the whole square lightgrey
 					if (pgm_int_array[i][j] == NOEUD){
-          				resized[i * N + k][j * N + l] =  170;
+          				resized[i * metre + k][j * metre + l] =  170;
 					}
 					//if the integer in the array corresponds to a vertical path we color the square with
-					//a white vertical line that has a width of M
+					//a white vertical line that has a width of largeur
 					else if (pgm_int_array[i][j] == ARC_VERTICAL) {
-						if ( l >= non_passage && l < (non_passage + M)) {
-							resized[i * N + k][j * N + l] =  255;
+						if ( l >= non_passage && l < (non_passage + largeur)) {
+							resized[i * metre + k][j * metre + l] =  255;
 						}
-						else resized[i * N + k][j * N + l] =  0;
+						else resized[i * metre + k][j * metre + l] =  0;
 					}
 					//if the integer in the array corresponds to an horizontal path we color the square with
-					//a white horizontal line that has a width of M
+					//a white horizontal line that has a width of largeur
 					else if (pgm_int_array[i][j] == ARC_HORIZONTAL) {
-						if ( k >= non_passage && k < (non_passage + M)) {
-							resized[i * N + k][j * N + l] =  255;
+						if ( k >= non_passage && k < (non_passage + largeur)) {
+							resized[i * metre + k][j * metre + l] =  255;
 						}
-						else resized[i * N + k][j * N + l] =  0;
+						else resized[i * metre + k][j * metre + l] =  0;
 					}
 					
-					else resized[i * N + k][j * N + l] = 0;
+					else resized[i * metre + k][j * metre + l] = 0;
 				}
 			}
 		}
 	}
-	printf ("resized\n");
 	return resized;
 }
 
-void write_to_file (byte ** pgm_int_array, int x_size, int y_size) {
+void write_to_file (byte ** pgm_int_array, int x_size, int y_size, int metre, int largeur) {
+
+	printf ("\nGenerating image ...\n");
 	//where the file is gonna go and it's name
 	char* pathname = {"image/image.pgm"};
 	//call to function adapt_size
-	byte ** resized = adapt_size (pgm_int_array, x_size, y_size);
+	byte ** resized = adapt_size (pgm_int_array, x_size, y_size, metre, largeur);
 
 	//opening the file, creating it if doesn't exist, if it exists we delete it's content
 	int fd = open (pathname, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1) { fprintf (stderr, "problem with syscall open\n"); abort();}
 
-	printf ("file opened\n");
 	char *buf_init = (char*) malloc (40);
-	sprintf (buf_init, "P2\n%d %d\n255\n", x_size*N+N, y_size*N+N);
-	printf ("%s",buf_init);
+	sprintf (buf_init, "P2\n%d %d\n255\n", x_size*metre+metre, y_size*metre+metre);
 	//we write to the file the magic number and the data concerning our image (height and width)
 	int size_written =  write(fd, buf_init, strlen(buf_init));
 	if (size_written == -1) { fprintf (stderr, "problem with syscall write\n"); abort();}
 	free (buf_init);
 
- 	for (int y = 0; y < y_size * N + N; y++) {
-		for (int x = 0; x < x_size * N + N; x++) {
+ 	for (int y = 0; y < y_size * metre + metre; y++) {
+		for (int x = 0; x < x_size * metre + metre; x++) {
 			//we write each number of our array in the file
-			char *strint = (char*) malloc (10);
+			char *strint = (char*) malloc (5);
 			sprintf (strint, "%d ", resized[y][x]);
 			size_written = write (fd, strint, strlen (strint));
 			if (size_written == -1) { fprintf (stderr, "problem with syscall write\n"); abort();}
@@ -154,7 +160,7 @@ void write_to_file (byte ** pgm_int_array, int x_size, int y_size) {
 
 	}
 	//freeing resized
-	for (int i = 0; i<(y_size+2)*N; i++) {
+	for (int i = 0; i<(y_size+2)*metre; i++) {
 		free (resized[i]);
 	}
 	free (resized);
@@ -167,6 +173,5 @@ void write_to_file (byte ** pgm_int_array, int x_size, int y_size) {
 
 
 	if (close (fd) == -1) { fprintf (stderr, "problem with syscall close\n"); abort();}
-	printf ("file closed\n");
 	printf ("\nlabyrinth is in image/ and has name image.pmg\n\n");
 }
