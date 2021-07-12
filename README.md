@@ -1,5 +1,5 @@
 # PAC-Man like graphs  
-### This project is part of the Data structure and algorithms class at the University of Strasbourg  
+### This project is part of the second Data structure and algorithms class (SDA2) at the University of Strasbourg   (4th Semester)
 *(see assignement description (In french))*  
 
 ## Presentation  
