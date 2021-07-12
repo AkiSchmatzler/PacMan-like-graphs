@@ -46,7 +46,7 @@ docs:
 
 dist: 
 	@mkdir -p dist
-	tar -l -cvf dist/Aki_Schmatzler_projet_SDA2.tar.xz src include makefile image Doxyfile compte_rendu.pdf
+	tar -l -cvf dist/Aki_Schmatzler_projet_SDA2.tar.xz src include makefile image Doxyfile compte_rendu.pdf README.md
 	@echo "\n ######## Archive created ########\n"
 	
 

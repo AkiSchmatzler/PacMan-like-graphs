@@ -1,6 +1,6 @@
 # PAC-Man like graphs  
 ### This project is part of the Data structure and algorithms class at the University of Strasbourg  
-
+*(see assignement description (In french))*  
 
 ## Presentation  
 You can create graphs with this program and also represent it as an image (in the image/ directory you'll find some examples of graphs)  
@@ -22,4 +22,5 @@ After the files have been compiled, you can use `./bin/main` to execute the prog
 The source C file are in src/ directory, the headers are in the include/ directory  
 The images are going to be put in the image/ directory  
 :warning: Do not remove image/ directory.  
-If you wanna keep an image, change it's name, the generic name is always image.pgm, which means an image will write over the current image.pgm file content (if this file exists in the image/ repository) 
+If you wanna keep an image, change it's name, the generic name is always image.pgm, which means an image will write over the current image.pgm file content (if this file exists in the image/ repository)  
+
